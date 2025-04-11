@@ -1,8 +1,15 @@
 {
   "name": "php127/moredian-sdk",
   "license": "MIT",
+  "description": "魔点考勤机PHP-SDK",
+  "keywords": [
+    "moredian-sdk",
+    "魔点考勤机",
+    "魔点门禁",
+    "魔点办公"
+  ],
   "require": {
-    "php": "^7.4",
+    "php": "^7.4|^7.3",
     "guzzlehttp/guzzle": "^7.9",
     "ext-json": "*",
     "ext-redis": "*"
