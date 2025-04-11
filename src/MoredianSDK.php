@@ -20,12 +20,22 @@ class MoredianSDK
         $this->config = new Config($config);
         $this->client = new Client();
 
-        if(isset($config['redis'])){
+        if (isset($config['redis'])) {
             $cache = new Cache($config['redis']);
-            $this->cache = $cache->getClient();
+            $this->setCache($cache->getClient());
         }
     }
 
+
+    public function getCache()
+    {
+        return $this->cache;
+    }
+
+    public function setCache($cache)
+    {
+        $this->cache = $cache;
+    }
 
     public function getClient()
     {
@@ -37,23 +47,12 @@ class MoredianSDK
         return $this->config;
     }
 
-    public function setCache($cache)
-    {
-        $this->cache = $cache;
-    }
-
-
-    public function getCache()
-    {
-        return $this->cache;
-    }
-
-    public function postJson($url,array $data): array
+    public function postJson($url, array $data): array
     {
 
 
-        $url = $url.'?accessToken='.$this->accessToken();
-        
+        $url = $url . '?accessToken=' . $this->accessToken();
+
         $result = $this->getClient()->post($url, [
             'json' => $data,
         ]);
@@ -63,14 +62,14 @@ class MoredianSDK
         return $result;
     }
 
-    public function get($url,array $data = []): array
+    public function get($url, array $data = []): array
     {
 
         $accessToken = $this->accessToken();
 
         $data = array_merge([
             'accessToken' => $accessToken,
-        ],$data);
+        ], $data);
 
         $result = $this->getClient()->get($url, [
             'query' => $data,
@@ -82,46 +81,17 @@ class MoredianSDK
     }
 
 
-    public function appToken(){
 
-        if(!$this->getCache()){
+    public function accessToken()
+    {
+
+        if (!$this->getCache()) {
             throw new \Exception('请先设置缓存');
         }
 
-        $key = 'MoredianSDK:appToken:'.$this->config->getAppId();
+        $key = 'MoredianSDK:accessToken:' . $this->config->getOrgId();
         $cache = $this->getCache();
-        if($appToken = $cache->get($key)){
-            return $appToken;
-        }
-
-        $data = [
-            'appId' => $this->config->getAppId(),
-            'appKey' => $this->config->getAppKey(),
-        ];
-
-        $result = $this->get('/app/getAppToken', $data);
-
-        if($result['result']!=0){
-            throw new \Exception('操作失败:' .$result['message']);
-        }
-
-        $appToken = $result['data']['appToken'];
-
-        $cache->set($key,$appToken,7200);
-
-        return $appToken;
-    }
-
-
-    public function accessToken(){
-
-        if(!$this->getCache()){
-            throw new \Exception('请先设置缓存');
-        }
-
-        $key = 'MoredianSDK:accessToken:'.$this->config->getOrgId();
-        $cache = $this->getCache();
-        if($accessToken = $cache->get($key)){
+        if ($accessToken = $cache->get($key)) {
             return $accessToken;
         }
 
@@ -131,17 +101,62 @@ class MoredianSDK
             'orgAuthKey' => $this->config->getOrgAuthKey(),
         ];
 
-        $result = $this->get('/app/getOrgAccessToken', $data);
+        $response = $this->getClient()->post('/app/getOrgAccessToken', [
+            'json' => $data,
+        ]);
 
-        if($result['result']!=0){
-            throw new \Exception('操作失败:' .$result['message']);
+
+        $result = json_decode($response->getBody()->getContents(),true);
+
+
+
+        if ($result['result'] != 0) {
+            throw new \Exception('操作失败:' . $result['message']);
         }
 
         $accessToken = $result['data']['accessToken'];
 
-        $cache->set($key,$accessToken,7200);
+        $cache->set($key, $accessToken, 7200);
 
         return $accessToken;
 
+    }
+
+
+
+
+    public function appToken()
+    {
+
+        if (!$cache = $this->getCache()) {
+            throw new \Exception('请先设置缓存');
+        }
+
+        $key = 'MoredianSDK:appToken:' . $this->config->getAppId();
+        if ($appToken = $cache->get($key)) {
+            return $appToken;
+        }
+
+        $data = [
+            'appId' => $this->config->getAppId(),
+            'appKey' => $this->config->getAppKey(),
+        ];
+
+        $response = $this->getClient()->post('/app/getAppToken', [
+            'json' => $data,
+        ]);
+
+
+        $result = json_decode($response->getBody()->getContents(),true);
+
+        if ($result['result'] != 0) {
+            throw new \Exception('操作失败:' . $result['message']);
+        }
+
+        $appToken = $result['data']['appToken'];
+
+        $cache->set($key, $appToken, 7200);
+
+        return $appToken;
     }
 }
