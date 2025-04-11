@@ -63,8 +63,14 @@ class MoredianSDK
         return $result;
     }
 
-    public function get($url,array $data): array
+    public function get($url,array $data = []): array
     {
+
+        $accessToken = $this->accessToken();
+
+        $data = array_merge([
+            'accessToken' => $accessToken,
+        ],$data);
 
         $result = $this->getClient()->get($url, [
             'query' => $data,
