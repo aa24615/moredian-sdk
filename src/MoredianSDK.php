@@ -19,7 +19,10 @@ class MoredianSDK
     {
         $this->config = new Config($config);
         $this->client = new Client();
-        $this->cache = new Cache();
+        if($config['redis']){
+            $this->cache = new Cache($config['redis']);
+        }
+
         $this->appToken();
     }
 

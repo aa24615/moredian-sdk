@@ -6,12 +6,13 @@ class Cache
 {
     protected $client;
 
-    public function __construct()
+    public function __construct(array $config)
     {
         $this->client = new \Redis();
-        $this->client->connect('192.168.2.5',6379);
-        $this->client->auth('xxxx');
+        $this->client->connect($config['host'],$config['port']);
+        $this->client->auth($config['password']);
     }
+
     public function getClient(){
         return $this->client;
     }

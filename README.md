@@ -32,7 +32,12 @@ $config = [
      'appId' => 'xxx',
      'appKey' => 'xxx',
      'orgId' => 'xxx',
-     'orgAuthKey' => 'xxx'
+     'orgAuthKey' => 'xxx',
+     'redis' => [ //默认只支持redis缓存,不传请替换自己的缓存驱动
+         'host' => '127.0.0.1',
+         'port' => 6379,
+         'password' => 'xxx'
+     ]
  ];
     
 $sdk = new MoredianSDK($config);
