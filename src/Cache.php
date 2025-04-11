@@ -17,11 +17,4 @@ class Cache
         return $this->client;
     }
 
-    /**
-     * @param \Redis $client
-     */
-    public function setClient(\Redis $client): void
-    {
-        $this->client = $client;
-    }
 }

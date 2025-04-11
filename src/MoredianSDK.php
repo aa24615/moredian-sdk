@@ -18,12 +18,14 @@ class MoredianSDK
     public function __construct(array $config)
     {
         $this->config = new Config($config);
+
+
+
         $this->client = new Client();
         if($config['redis']){
-            $this->cache = new Cache($config['redis']);
+            $cache = new Cache($config['redis']);
+            $this->cache = $cache->getClient();
         }
-
-        $this->appToken();
     }
 
 
@@ -45,11 +47,12 @@ class MoredianSDK
 
     public function getCache()
     {
-        return $this->cache->getClient();
+        return $this->cache;
     }
 
     public function postJson($url,array $data): array
     {
+
 
         $url = $url.'?accessToken='.$this->accessToken();
         
@@ -64,6 +67,7 @@ class MoredianSDK
 
     public function get($url,array $data): array
     {
+
         $result = $this->getClient()->get($url, [
             'query' => $data,
         ]);
@@ -75,6 +79,10 @@ class MoredianSDK
 
 
     public function appToken(){
+
+        if(!$this->getCache()){
+            throw new \Exception('请先设置缓存');
+        }
 
         $key = 'MoredianSDK:appToken:'.$this->config->getAppId();
         $cache = $this->getCache();
@@ -102,6 +110,10 @@ class MoredianSDK
 
 
     public function accessToken(){
+
+        if(!$this->getCache()){
+            throw new \Exception('请先设置缓存');
+        }
 
         $key = 'MoredianSDK:accessToken:'.$this->config->getOrgId();
         $cache = $this->getCache();
