@@ -18,11 +18,9 @@ class MoredianSDK
     public function __construct(array $config)
     {
         $this->config = new Config($config);
-
-
-
         $this->client = new Client();
-        if($config['redis']){
+
+        if(isset($config['redis'])){
             $cache = new Cache($config['redis']);
             $this->cache = $cache->getClient();
         }
