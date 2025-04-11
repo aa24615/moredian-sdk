@@ -47,7 +47,7 @@ class MoredianSDK
         return $this->config;
     }
 
-    public function postJson($url, array $data): array
+    public function postJson($url, array $data=[]): array
     {
 
 
@@ -102,7 +102,7 @@ class MoredianSDK
         ];
 
         $response = $this->getClient()->post('/app/getOrgAccessToken', [
-            'json' => $data,
+            'query' => $data,
         ]);
 
 
@@ -142,8 +142,8 @@ class MoredianSDK
             'appKey' => $this->config->getAppKey(),
         ];
 
-        $response = $this->getClient()->post('/app/getAppToken', [
-            'json' => $data,
+        $response = $this->getClient()->get('/app/getAppToken', [
+            'query' => $data,
         ]);
 
 
