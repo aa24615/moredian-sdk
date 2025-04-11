@@ -116,7 +116,8 @@ class MoredianSDK
 
         $accessToken = $result['data']['accessToken'];
 
-        $cache->set($key, $accessToken, 7200);
+        $cache->set($key, $accessToken);
+        $cache->expire($key, 7200);
 
         return $accessToken;
 
@@ -155,7 +156,9 @@ class MoredianSDK
 
         $appToken = $result['data']['appToken'];
 
-        $cache->set($key, $appToken, 7200);
+        $cache->set($key, $appToken);
+        $cache->expire($key, 7200);
+
 
         return $appToken;
     }
