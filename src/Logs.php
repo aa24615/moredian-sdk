@@ -4,19 +4,28 @@ namespace MoredianSDK;
 
 class Logs
 {
-    protected $debug;
-    protected $path;
+    protected $debug = false;
+    protected $path = 'moredian.log';
 
     public function __construct(array $config)
     {
-        $this->debug = $config['debug'] ? true : false;
-        $this->path = $config['path'];
+        if(isset($config['debug'])){
+            $this->debug = $config['debug'];
+        }
+
+        if(isset($config['path'])){
+            $this->path = $config['path'];
+        }
     }
 
     public function debug($url,$data,$result)
     {
 
+        $message = 'url: '.$url.PHP_EOL;
+        $message .= 'param: '.print_r($data, true).PHP_EOL;
+        $message .= 'result: '.print_r($result, true).PHP_EOL;
 
+        $this->info($message);
     }
 
     public function info($message)

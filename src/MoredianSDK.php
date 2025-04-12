@@ -27,9 +27,8 @@ class MoredianSDK
             $this->setCache($cache->getClient());
         }
 
-        if(isset($config['logs'])){
-            $this->logs = new Logs($config['logs']);
-        }
+
+        $this->logs = new Logs($config['logs'] ?? []);
 
     }
 
