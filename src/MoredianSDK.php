@@ -10,6 +10,8 @@ class MoredianSDK
 
     protected $cache;
 
+    protected $logs;
+
     /*
      * @var MoredianClient
      */
@@ -24,6 +26,11 @@ class MoredianSDK
             $cache = new Cache($config['redis']);
             $this->setCache($cache->getClient());
         }
+
+        if(isset($config['logs'])){
+            $this->logs = new Logs($config['logs']);
+        }
+
     }
 
 
@@ -59,6 +66,9 @@ class MoredianSDK
 
         $result = json_decode($result->getBody()->getContents(), true);
 
+
+        $this->logs->debug($url, ['json' => $data,], $result);
+
         return $result;
     }
 
@@ -70,6 +80,8 @@ class MoredianSDK
         $result = $this->getClient()->post($url, $data);
 
         $result = json_decode($result->getBody()->getContents(), true);
+
+        $this->logs->debug($url,$data, $result);
 
         return $result;
     }
@@ -88,6 +100,8 @@ class MoredianSDK
         ]);
 
         $result = json_decode($result->getBody()->getContents(), true);
+
+        $this->logs->debug($url, $data, $result);
 
         return $result;
     }
@@ -120,7 +134,7 @@ class MoredianSDK
 
         $result = json_decode($response->getBody()->getContents(),true);
 
-
+        $this->logs->debug('/app/getOrgAccessToken', $data, $result);
 
         if ($result['result'] != 0) {
             throw new \Exception('操作失败:' . $result['message']);
@@ -161,6 +175,10 @@ class MoredianSDK
 
 
         $result = json_decode($response->getBody()->getContents(),true);
+
+
+        $this->logs->debug('/app/getAppToken', $data, $result);
+
 
         if ($result['result'] != 0) {
             throw new \Exception('操作失败:' . $result['message']);

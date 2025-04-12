@@ -37,6 +37,10 @@ $config = [
          'host' => '127.0.0.1',
          'port' => 6379,
          'password' => 'xxx'
+     ],
+     'logs' => [ //不传不记录日志
+          'debug' => true, //是否开启
+          'path'  => 'logs.log',
      ]
  ];
     
