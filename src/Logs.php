@@ -42,7 +42,7 @@ class Logs
             $contents = $date . PHP_EOL;
             $contents .= $message . PHP_EOL;
 
-            file_put_contents($contents, $this->path, $message, FILE_APPEND);
+            file_put_contents( $this->path, $contents, FILE_APPEND);
         }
 
     }
