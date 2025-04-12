@@ -62,6 +62,18 @@ class MoredianSDK
         return $result;
     }
 
+    public function post($url, array $data=[]): array
+    {
+
+        $url = $url . '?accessToken=' . $this->accessToken();
+
+        $result = $this->getClient()->post($url, $data);
+
+        $result = json_decode($result->getBody()->getContents(), true);
+
+        return $result;
+    }
+
     public function get($url, array $data = []): array
     {
 
