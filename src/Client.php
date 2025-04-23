@@ -16,7 +16,7 @@ class Client
     {
 
         $this->client = new GuzzleClient([
-            'base_uri' => 'https://oapi.moredian.com',
+            'base_uri' => 'https://ioapi.moredian.com',
             'timeout' => 10.0,
             'http_errors' => false,
             'decode_content' => true,

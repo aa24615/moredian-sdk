@@ -126,14 +126,14 @@ class MoredianSDK
             'orgAuthKey' => $this->config->getOrgAuthKey(),
         ];
 
-        $response = $this->getClient()->post('/app/getOrgAccessToken', [
+        $response = $this->getClient()->post('/oapi/v5/app/getOrgAccessTok', [
             'query' => $data,
         ]);
 
 
         $result = json_decode($response->getBody()->getContents(),true);
 
-        $this->logs->debug('/app/getOrgAccessToken', $data, $result);
+        $this->logs->debug('/oapi/v5/app/getOrgAccessTok', $data, $result);
 
         if ($result['result'] != 0) {
             throw new \Exception('操作失败:' . $result['message']);
@@ -168,7 +168,7 @@ class MoredianSDK
             'appKey' => $this->config->getAppKey(),
         ];
 
-        $response = $this->getClient()->get('/app/getAppToken', [
+        $response = $this->getClient()->get('/oapi/v5/app/getAppToken', [
             'query' => $data,
         ]);
 
@@ -176,7 +176,7 @@ class MoredianSDK
         $result = json_decode($response->getBody()->getContents(),true);
 
 
-        $this->logs->debug('/app/getAppToken', $data, $result);
+        $this->logs->debug('/oapi/v5/app/getAppToken', $data, $result);
 
 
         if ($result['result'] != 0) {
