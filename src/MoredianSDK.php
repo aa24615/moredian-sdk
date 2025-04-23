@@ -121,12 +121,13 @@ class MoredianSDK
         }
 
         $data = [
-            'appToken' => $this->appToken(),
+            'appId' => $this->config->getAppId(),
+            'appKey' => $this->config->getAppKey(),
             'orgId' => $this->config->getOrgId(),
             'orgAuthKey' => $this->config->getOrgAuthKey(),
         ];
 
-        $response = $this->getClient()->post('/oapi/v5/app/getOrgAccessTok', [
+        $response = $this->getClient()->get('/oapi/v5/app/getOrgAccessToken', [
             'query' => $data,
         ]);
 
